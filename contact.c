@@ -36,6 +36,10 @@ void contactToevoegen(Contact contacten[], int *aantalContacten) {
 };
 
 void contactenTonen(Contact contacten[], int aantalContacten) {
+    if (aantalContacten <= 0) {
+        printf("Het telefoonboek is nog leeg.\n");
+        return;
+    }
     for (int i = 0; i < aantalContacten; i++) {
         printf("\nContact %d:\n", i+1);
         printf("Naam: %s\n", contacten[i].naam);
