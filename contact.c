@@ -5,25 +5,33 @@
 #include <stdio.h>
 #include "contact.h"
 
+#include <string.h>
+
+void leesRegel(char buffer[], int size) {
+    fgets(buffer, size, stdin);
+    buffer[strcspn(buffer, "\n")] = '\0';
+};
+
 void contactToevoegen(Contact contacten[], int *aantalContacten) {
-    int loop = 1;
-    Contact nieuwContact;
-    while (loop) {
-        printf("Naam: ");
-        scanf("%s", nieuwContact.naam);
-        getchar();
-        printf("Email: ");
-        scanf("%s", nieuwContact.email);
-        getchar();
-        printf("Telefoonnummer: ");
-        scanf("%s", nieuwContact.telefoonNummer);
-        getchar();
-        loop = 0;
+    if (*aantalContacten >= MAX_CONTACTS) {
+        printf("Telefoonboek is vol!");
+        return;
     }
+    Contact nieuwContact;
+
+    printf("Naam: ");
+    leesRegel(nieuwContact.naam, sizeof(nieuwContact.naam));
+
+    printf("Email: ");
+    leesRegel(nieuwContact.email, sizeof(nieuwContact.email));
+
+    printf("Telefoonnummer: ");
+    leesRegel(nieuwContact.telefoonNummer, sizeof(nieuwContact.telefoonNummer));
 
 
     contacten[*aantalContacten] = nieuwContact;
     (*aantalContacten)++;
+
     printf("Contact %s is opgeslagen.\n%d/100 Contacten\n", nieuwContact.naam, *aantalContacten);
 };
 
@@ -36,29 +44,35 @@ void contactenTonen(Contact contacten[], int aantalContacten) {
     }
 }
 
+
 void contactUpdaten(Contact contacten[], int aantalContacten) {
+    int keuze;
+
+    if (aantalContacten <= 0) {
+        printf("Het telefoonboek is nog leeg.\nVoeg eerst een contact toe!");
+        return;
+    }
     contactenTonen(contacten, aantalContacten);
     printf("Selecteer een contact: [nummer]\n");
-    int keuze;
     scanf("%d", &keuze);
     getchar();
 
-    if (keuze > aantalContacten) {
+    if (keuze <= 0 || keuze > aantalContacten) {
         printf("Keuze bestaat niet");
     } else {
         Contact teUpdatenContact = contacten[keuze - 1];
+
         printf("Huidige naam: \"%s\"\nVoer een nieuwe naam in:\n", teUpdatenContact.naam);
-        scanf("%s", teUpdatenContact.naam);
-        getchar();
+        leesRegel(teUpdatenContact.naam, sizeof(teUpdatenContact.naam));
+
         printf("Huidige email: \"%s\"\nVoer een nieuwe email in:\n", teUpdatenContact.email);
-        scanf("%s", teUpdatenContact.email);
-        getchar();
-        printf("Huidige telefoonnummer: \"%s\"\nVoer een nieuwe telefoonnummer in:\n", teUpdatenContact.naam);
-        scanf("%s", teUpdatenContact.telefoonNummer);
-        getchar();
+        leesRegel(teUpdatenContact.email, sizeof(teUpdatenContact.email));
+
+        printf("Huidige telefoonnummer: \"%s\"\nVoer een nieuwe telefoonnummer in:\n", teUpdatenContact.telefoonNummer);
+        leesRegel(teUpdatenContact.telefoonNummer, sizeof(teUpdatenContact.telefoonNummer));
+
         contacten[keuze - 1] = teUpdatenContact;
         printf("Contact %s is opgeslagen.\n%d/100 Contacten\n", contacten[keuze-1].naam, aantalContacten);
-
     }
 };
 

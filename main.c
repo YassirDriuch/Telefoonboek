@@ -5,11 +5,6 @@
 #include <stdio.h>
 #include "contact.h"
 
-#define MAX_CONTACTS 100
-
-
-
-
 void menu() {
     Contact contacten[MAX_CONTACTS];
     int aantalContacten = 0;

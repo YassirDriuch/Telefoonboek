@@ -4,6 +4,7 @@
 
 #ifndef TELEFOONBOEK_CONTACT_H
 #define TELEFOONBOEK_CONTACT_H
+#define MAX_CONTACTS 100
 
 typedef struct {
     char naam[50];
