@@ -7,33 +7,20 @@
 
 #include <string.h>
 
-void leesRegel(char buffer[], int size) {
-    fgets(buffer, size, stdin);
-    buffer[strcspn(buffer, "\n")] = '\0';
-};
 
-void contactToevoegen(Contact contacten[], int *aantalContacten) {
+
+int contact_toevoegen(Contact contacten[], int *aantalContacten, Contact contact) {
     if (*aantalContacten >= MAX_CONTACTS) {
-        printf("Telefoonboek is vol!");
-        return;
+        return 0;
     }
-    Contact nieuwContact;
 
-    printf("Naam: ");
-    leesRegel(nieuwContact.naam, sizeof(nieuwContact.naam));
-
-    printf("Email: ");
-    leesRegel(nieuwContact.email, sizeof(nieuwContact.email));
-
-    printf("Telefoonnummer: ");
-    leesRegel(nieuwContact.telefoonNummer, sizeof(nieuwContact.telefoonNummer));
-
-
-    contacten[*aantalContacten] = nieuwContact;
+    snprintf(contacten[*aantalContacten].naam, sizeof(contacten[*aantalContacten].naam), "%s", contact.naam);
+    snprintf(contacten[*aantalContacten].email, sizeof(contacten[*aantalContacten].email), "%s", contact.email);
+    snprintf(contacten[*aantalContacten].telefoonNummer, sizeof(contacten[*aantalContacten].telefoonNummer), "%s", contact.telefoonNummer);
     (*aantalContacten)++;
+    return 1;
 
-    printf("Contact %s is opgeslagen.\n%d/100 Contacten\n", nieuwContact.naam, *aantalContacten);
-};
+}
 
 void contactenTonen(Contact contacten[], int aantalContacten) {
     if (aantalContacten <= 0) {
@@ -49,57 +36,29 @@ void contactenTonen(Contact contacten[], int aantalContacten) {
 }
 
 
-void contactUpdaten(Contact contacten[], int aantalContacten) {
-    int keuze;
+int contact_updaten(Contact contacten[], int contactIndex, Contact contact) {
+    snprintf(contacten[contactIndex].naam, sizeof(contacten[contactIndex].naam), "%s", contact.naam);
+    snprintf(contacten[contactIndex].email, sizeof(contacten[contactIndex].email), "%s", contact.email);
+    snprintf(contacten[contactIndex].telefoonNummer, sizeof(contacten[contactIndex].telefoonNummer), "%s", contact.telefoonNummer);
 
-    if (aantalContacten <= 0) {
-        printf("Het telefoonboek is nog leeg.\nVoeg eerst een contact toe!");
-        return;
-    }
-    contactenTonen(contacten, aantalContacten);
-    printf("Selecteer een contact: [nummer]\n");
-    scanf("%d", &keuze);
-    getchar();
+    return 1;
+}
 
-    if (keuze <= 0 || keuze > aantalContacten) {
-        printf("Keuze bestaat niet");
-    } else {
-        Contact teUpdatenContact = contacten[keuze - 1];
-
-        printf("Huidige naam: \"%s\"\nVoer een nieuwe naam in:\n", teUpdatenContact.naam);
-        leesRegel(teUpdatenContact.naam, sizeof(teUpdatenContact.naam));
-
-        printf("Huidige email: \"%s\"\nVoer een nieuwe email in:\n", teUpdatenContact.email);
-        leesRegel(teUpdatenContact.email, sizeof(teUpdatenContact.email));
-
-        printf("Huidige telefoonnummer: \"%s\"\nVoer een nieuwe telefoonnummer in:\n", teUpdatenContact.telefoonNummer);
-        leesRegel(teUpdatenContact.telefoonNummer, sizeof(teUpdatenContact.telefoonNummer));
-
-        contacten[keuze - 1] = teUpdatenContact;
-        printf("Contact %s is opgeslagen.\n%d/100 Contacten\n", contacten[keuze-1].naam, aantalContacten);
-    }
-};
-
-void contactVerwijderen(Contact contacten[], int *aantalContacten) {
+int contact_verwijderen(Contact contacten[], int *aantalContacten, int contactIndex) {
     if (*aantalContacten == 0) {
-        printf("Er zijn geen contacten om te verwijderen\n");
-        return;
+        // printf("Er zijn geen contacten om te verwijderen\n");
+        return 0;
     }
-    contactenTonen(contacten, *aantalContacten);
-
-    int keuze;
-    scanf("%d", &keuze);
-    getchar();
-
-    if (keuze < 1|| keuze > *aantalContacten) {
-        printf("Keuze bestaat niet\n");
-        return;
+    if (contactIndex < 0|| contactIndex > *aantalContacten-1) {
+        // printf("Keuze bestaat niet\n");
+        return -1;
     }
 
-    for (int i = keuze-1; i < *aantalContacten-1; ++i) {
+    for (int i = contactIndex; i < *aantalContacten-1; ++i) {
         contacten[i] = contacten[i+1];
     }
 
     (*aantalContacten)--;
-    printf("Contact Verwijderd!\n");
-};
+    // printf("Contact Verwijderd!\n");
+    return 1;
+}

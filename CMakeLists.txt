@@ -5,4 +5,8 @@ set(CMAKE_C_STANDARD 11)
 
 add_executable(Telefoonboek main.c
         contact.h
-        contact.c)
+        contact.c
+        cli.h
+        cli.c
+        gui.h
+        gui.c)

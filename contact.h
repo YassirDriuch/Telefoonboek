@@ -12,9 +12,9 @@ typedef struct {
     char telefoonNummer[50];
 }Contact;
 
-void contactToevoegen(Contact contacten[], int *aantalContacten);
+int contact_toevoegen(Contact contacten[], int *aantalContacten, Contact contact);
 void contactenTonen(Contact contacten[], int aantalContacten);
-void contactUpdaten(Contact contacten[], int aantalContacten);
-void contactVerwijderen(Contact contacten[], int *aantalContacten);
+int contact_updaten(Contact contacten[], int contactIndex, Contact contact);
+int contact_verwijderen(Contact contacten[], int *aantalContacten, int contactIndex);
 
 #endif //TELEFOONBOEK_CONTACT_H
